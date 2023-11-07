@@ -15,65 +15,65 @@
 # Preguntar si se quiere jugar de nuevo
 
 
-def menú_inicial():
+def bienvenida():
     """
-    Imprime el banner de bienvenida y muestra y valida el
-    menú inicial del juego.
+    Imprime el banner de bienvenida y el menú inicial
     """
 
     print("\033[38;2;255;211;64m ┌──────────────────────────────────────┐ \033[0;m")
     print("\033[38;2;255;211;64m │                                      │ \033[0;m")
     print("\033[38;2;255;211;64m │  SOLARPUNK Y JARDINERÍA CLANDESTINA  │ \033[0;m")
     print("\033[38;2;255;211;64m │                                      │ \033[0;m")
-    print("\033[38;2;255;211;64m │  <<<<<<<<< MENÚ PRINCIPAL >>>>>>>>>  │ \033[0;m")
+    print("\033[38;2;255;211;64m │  ───────── MENÚ PRINCIPAL ─────────  │ \033[0;m")
     print("\033[38;2;255;211;64m │                                      │ \033[0;m")
     print("\033[38;2;255;211;64m │  [1] Iniciar juego                   │ \033[0;m")
     print("\033[38;2;255;211;64m │  [2] Instrucciones                   │ \033[0;m")
-    print("\033[38;2;255;211;64m │  [3] Sobre Jardinería clandestina    │ \033[0;m")
+    print("\033[38;2;255;211;64m │  [3] Sobre jardinería clandestina    │ \033[0;m")
     print("\033[38;2;255;211;64m │                                      │ \033[0;m")
     print("\033[38;2;255;211;64m └──────────────────────────────────────┘ \033[0;m")
     print()
 
-    opción = menú_inicial_aux()
 
-    # Validaciones
+def menú_inicial():
+    """
+    Solicita al jugador que elija una opción y valida que
+    la entrada sea un número entre 1 y 3.
+    """
+
+    opción = input("\033[38;2;255;211;64m >> \033[0;m")
+
     if opción.isdigit():
-        if 1 <= int(opción) <= 3:
+        opción = int(opción)
+
+        if 1 <= opción <= 3:
             # print("\033[2J\033[1;1f")
-            # Aquí debe ir alguna referencia para el menú de dificultad
-            print("Menú de dificultad")
+
+            if opción == 1:  # Iniciar juego
+                print("\033[2J\033[1;1f")
+                print("\nMenú de dificultad\n")
+
+            elif opción == 2:  # Intrucciones
+                print("\033[2J\033[1;1f")
+                print("\nIntrucciones\n")
+
+            elif opción == 3:  # Solarpunk y jardinería clandestina
+                print("\033[2J\033[1;1f")
+                print("\nSolarpunk y jardinería clandestina\n")
 
         else:
-            print("\033[;31m Opción no válida.\n \033[0;m")
-            menú_inicial_aux()
+            print("\033[38;2;255;0;0m Opción no válida.\n \033[0;m")
+            menú_inicial()
 
     else:
-        print("\033[;31m Entrada no válida. Únicamente números entre 1 y 3.\n \033[0;m")
-        menú_inicial_aux()
-
-
-def menú_inicial_aux():  # Menu Aux 1
-    """
-    Auxiliar
-    """
-
-    opción = input("\033[38;2;255;211;64m Elija una opción: \033[0;m")
-
-    if opción == "1":  # Iniciar juego
-        return opción
-
-    elif opción == "2":  # Intrucciones
-        return opción
-
-    elif opción == "3":  # Solarpunk y Jardinería clandestina
-        return opción
-
-    else:
-        return menú_inicial_aux()
+        print("\033[38;2;255;0;0m Entrada no válida. Solo números entre 1 y 3.\n \033[0;m")
+        menú_inicial()
 
 
 def principal():
+    bienvenida()
     menú_inicial()
+    # Menú de dificultad
+    # Mostrar ciudad (matriz)
 
 
 principal()
