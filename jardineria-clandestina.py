@@ -111,13 +111,13 @@ def menú_dificultad():
             elif dificultad == 3:  # Difícil
                 print("\033[2J\033[1;1f")
                 print("\nDíficil\n")
-            
+
             elif dificultad == 4:  # Personalizado
                 print("\033[2J\033[1;1f")
                 print("\nPersonalizado\n")
                 # Aquí se llama a la función para setear el tamaño nxm
                 # de la matriz.
-            
+
         else:
             print("\033[2J\033[1;1f")
             msj_error = "\033[38;2;255;0;0m \nOpción no válida.\n \033[0;m"
@@ -132,6 +132,9 @@ def menú_dificultad():
 def principal():
     bienvenida()
     menú_principal()
+    # Aquí debería ir la función menú_dificultad, pero no sé cómo
+    # desvincularla del menú incial, ya que necesito llamarla cuando
+    # la opción elegida es 1.
     # Mostrar ciudad (matriz)
 
 
