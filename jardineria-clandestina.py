@@ -69,7 +69,7 @@ def menú_principal():
         menú_principal()
 
 
-msj_error = ""  # Variable que muestra un mensaje de error de entrada.
+msj_error = ""  # Variable que muestra un mensaje de error.
 
 def menú_dificultad():
     """
