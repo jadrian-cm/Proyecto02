@@ -226,5 +226,4 @@ def principal():
     # la opción elegida es 1.
     # Mostrar ciudad (matriz)
 
-
 principal()
