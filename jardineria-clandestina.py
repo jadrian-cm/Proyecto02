@@ -17,7 +17,7 @@
 
 def bienvenida():
     """
-    Imprime el banner de bienvenida y el menú inicial
+    Imprime el banner de bienvenida y el menú inicial.
     """
 
     print("\033[38;2;255;211;64m ┌──────────────────────────────────────┐ \033[0;m")
@@ -34,10 +34,10 @@ def bienvenida():
     print()
 
 
-def menú_inicial():
+def menú_principal():
     """
-    Solicita al jugador que elija una opción y valida que
-    la entrada sea un número entre 1 y 3.
+    Función que solicita al jugador que elija una opción
+    y valida que la entrada sea un número entre 1 y 3.
     """
 
     opción = input("\033[38;2;255;211;64m >> \033[0;m")
@@ -50,7 +50,7 @@ def menú_inicial():
 
             if opción == 1:  # Iniciar juego
                 print("\033[2J\033[1;1f")
-                print("\nMenú de dificultad\n")
+                menú_dificultad()
 
             elif opción == 2:  # Intrucciones
                 print("\033[2J\033[1;1f")
@@ -62,17 +62,76 @@ def menú_inicial():
 
         else:
             print("\033[38;2;255;0;0m Opción no válida.\n \033[0;m")
-            menú_inicial()
+            menú_principal()
 
     else:
         print("\033[38;2;255;0;0m Entrada no válida. Solo números entre 1 y 3.\n \033[0;m")
-        menú_inicial()
+        menú_principal()
+
+
+msj_error = ""  # Variable que muestra un mensaje de error de entrada.
+
+def menú_dificultad():
+    """
+    Función que muestra el menú de dificultad y valida que
+    la entrada del jugador sea un número entre 1 y 4.
+    """
+
+    global msj_error
+
+    print("\033[38;2;255;211;64m ┌──────────────────────────────────────┐ \033[0;m")
+    print("\033[38;2;255;211;64m │                                      │ \033[0;m")
+    print("\033[38;2;255;211;64m │  SOLARPUNK Y JARDINERÍA CLANDESTINA  │ \033[0;m")
+    print("\033[38;2;255;211;64m │                                      │ \033[0;m")
+    print("\033[38;2;255;211;64m │  ───── DIFICULTADES DEL JUEGO ─────  │ \033[0;m")
+    print("\033[38;2;255;211;64m │                                      │ \033[0;m")
+    print("\033[38;2;255;211;64m │  [1] Fácil                           │ \033[0;m")
+    print("\033[38;2;255;211;64m │  [2] Normal                          │ \033[0;m")
+    print("\033[38;2;255;211;64m │  [3] Díficil                         │ \033[0;m")
+    print("\033[38;2;255;211;64m │  [4] Personalizado                   │ \033[0;m")
+    print("\033[38;2;255;211;64m │                                      │ \033[0;m")
+    print("\033[38;2;255;211;64m └──────────────────────────────────────┘ \033[0;m")
+
+    print(msj_error)
+
+    dificultad = input("\033[38;2;255;211;64m >> \033[0;m")
+
+    if dificultad.isdigit():
+        dificultad = int(dificultad)
+
+        if 1 <= dificultad <= 4:
+            if dificultad == 1:  # Fácil
+                print("\033[2J\033[1;1f")
+                print("\nFácil\n")
+
+            elif dificultad == 2:  # Normal
+                print("\033[2J\033[1;1f")
+                print("\nNormal\n")
+
+            elif dificultad == 3:  # Difícil
+                print("\033[2J\033[1;1f")
+                print("\nDíficil\n")
+            
+            elif dificultad == 4:  # Personalizado
+                print("\033[2J\033[1;1f")
+                print("\nPersonalizado\n")
+                # Aquí se llama a la función para setear el tamaño nxm
+                # de la matriz.
+            
+        else:
+            print("\033[2J\033[1;1f")
+            msj_error = "\033[38;2;255;0;0m \nOpción no válida.\n \033[0;m"
+            menú_dificultad()
+
+    else:
+        print("\033[2J\033[1;1f")
+        msj_error = "\033[38;2;255;0;0m \nEntrada no válida. Solo números entre 1 y 4.\n \033[0;m"
+        menú_dificultad()
 
 
 def principal():
     bienvenida()
-    menú_inicial()
-    # Menú de dificultad
+    menú_principal()
     # Mostrar ciudad (matriz)
 
 
