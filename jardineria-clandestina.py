@@ -132,10 +132,6 @@ def menú_dificultad():
 def principal():
     bienvenida()
     menú_principal()
-    # Aquí debería ir la función menú_dificultad, pero no sé cómo
-    # desvincularla del menú incial, ya que necesito llamarla cuando
-    # la opción elegida es 1.
-    # Mostrar ciudad (matriz)
 
 
 principal()
