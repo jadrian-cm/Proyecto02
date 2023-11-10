@@ -14,6 +14,15 @@
 # Crear función para verificar game over
 # Preguntar si se quiere jugar de nuevo
 
+#Semillas: [nombre, turnos para crecer, turnos vivas]
+semillas_facil = [ ["cosmos", 2], ["zinias", 3], ["salvias", 2], ["kiri", 3], ["herbaceas", 2] ]
+semillas_medio = [ ["cerezo", 4], ["tomate", 3], ["rosas", 3], ["tulipanes", 4], ["mamón chino", 4]]
+semillas_dificil = [ ["girasoles", 4, 9], ["papas", 5, 15], ["vinca", 5, 15], ["lirio", 5,15], ["dedalera", 6, 25] ]
+semillas = []
+
+dificultad = 0 #Nivel de dificultad
+mapa_juego = [] #Mapa que se va a usar
+
 
 def bienvenida():
     """
@@ -129,9 +138,101 @@ def menú_dificultad():
         menú_dificultad()
 
 
+
+def menu_dificultad():
+    """
+    Menú para escoger la dificultad
+    Modifica la variable "dificultad"
+    """
+    global dificultad
+    print("Elija su dificultad:")
+    print("1: Fácil")
+    print("2: Medio")
+    print("3: Dificil")
+    print("4: Personalizado")
+    dificultad = menu_dificultad_aux()
+     
+
+def menu_dificultad_aux():
+    """
+    Válida la opción elegida para la dificultad
+    """
+    n = input("Opción: ")
+    if not n.isdigit():
+        print("Sólo de números")
+        return menu_dificultad_aux()
+    
+    if int(n) < 1 or int(n) > 4 :
+        print("Solamente números entre 1 y 4")
+        return menu_dificultad_aux()
+    
+    return int(n)
+
+
+def crear_matriz_aux():
+    """
+    Escoge las dimensiones para 
+    crear una matriz
+    """
+    global dificultad
+    global mapa_juego
+    global semillas
+    #Dificuldades default
+    if dificultad == 1 :
+        mapa_juego = crear_matriz(6)
+        semillas = semillas_facil
+    elif dificultad == 2:
+        mapa_juego = crear_matriz(10)
+        semillas = semillas_medio
+    elif dificultad == 3:
+        mapa_juego = crear_matriz(18)
+        semillas = semillas_dificil
+
+    #Personalizadas
+    elif dificultad == 4 :   
+        #Validaciones     
+        n = input("Inserte el número de celdas: ")
+        if not n.isdigit():
+            print("Solo de números")
+            return crear_matriz_aux()
+        if int(n) <= 0:
+            print("Cantidad no válida")
+            return crear_matriz_aux()
+        #Crear matriz
+        mapa_juego = crear_matriz(int(n))
+        semillas = semillas_medio
+
+
+def crear_matriz(n):
+    """
+    Crea una matriz con las dimensiones
+    del parametro de entrada
+    """
+    global mapa_juego
+    for i in range(n):
+        fila = []
+        for j in range(n):
+            fila.append("☆")
+        mapa_juego.append(fila)
+   
+    return mapa_juego
+
+
+def mostrar_matriz():
+    """
+    Muestra los datos del tablero
+    """
+    global mapa_juego
+    for columna in mapa_juego :
+        print(columna)
+
+
 def principal():
     bienvenida()
     menú_principal()
-
+    # Aquí debería ir la función menú_dificultad, pero no sé cómo
+    # desvincularla del menú incial, ya que necesito llamarla cuando
+    # la opción elegida es 1.
+    # Mostrar ciudad (matriz)
 
 principal()
