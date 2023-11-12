@@ -101,6 +101,7 @@ def menú_dificultad():
     print("\033[38;2;255;211;64m │  [4] Personalizado                   │ \033[0;m")
     print("\033[38;2;255;211;64m │                                      │ \033[0;m")
     print("\033[38;2;255;211;64m └──────────────────────────────────────┘ \033[0;m")
+    print()
 
     dificultad = menu_dificultad_aux()
     
@@ -133,16 +134,18 @@ def menú_dificultad():
 
 def menu_dificultad_aux():
     """
-    Válida la opción elegida para la dificultad
+    Valida la opción elegida para la dificultad
     """
+    
     n = input("\033[38;2;255;211;64m >> \033[0;m")
+    
     if not n.isdigit():
         # print("\033[2J\033[1;1f")
-        print("\033[38;2;255;0;0m \nEntrada no válida. Solo números entre 1 y 4.\n \033[0;m")
+        print("\033[38;2;255;0;0m Entrada no válida. Solo números entre 1 y 4.\n \033[0;m")
         return menu_dificultad_aux()
     
     if int(n) < 1 or int(n) > 4 :
-        print("Solamente números entre 1 y 4")
+        print("\033[38;2;255;0;0m Solamente números entre 1 y 4.\n \033[0;m")
         return menu_dificultad_aux()
     
     return int(n)
@@ -150,34 +153,40 @@ def menu_dificultad_aux():
 
 def crear_matriz_aux():
     """
-    Escoge las dimensiones para 
-    crear una matriz
+    Escoge las dimensiones para crear una matriz.
     """
+
     global dificultad
     global mapa_juego
     global semillas
-    #Dificuldades default
+    
+    # Dificuldades default
     if dificultad == 1 :
         mapa_juego = crear_matriz(6)
         semillas = semillas_facil
+    
     elif dificultad == 2:
         mapa_juego = crear_matriz(10)
         semillas = semillas_medio
+    
     elif dificultad == 3:
         mapa_juego = crear_matriz(18)
         semillas = semillas_dificil
 
-    #Personalizadas
+    # Personalizadas
     elif dificultad == 4 :   
-        #Validaciones     
+        # Validaciones     
         n = input("Inserte el número de celdas: ")
+        
         if not n.isdigit():
             print("Solo de números")
             return crear_matriz_aux()
+        
         if int(n) <= 0:
             print("Cantidad no válida")
             return crear_matriz_aux()
-        #Crear matriz
+        
+        # Crear matriz
         mapa_juego = crear_matriz(int(n))
         semillas = semillas_medio
 
@@ -187,9 +196,12 @@ def crear_matriz(n):
     Crea una matriz con las dimensiones
     del parametro de entrada
     """
+    
     global mapa_juego
+    
     for i in range(n):
         fila = []
+        
         for j in range(n):
             fila.append("☆")
         mapa_juego.append(fila)
@@ -201,9 +213,25 @@ def mostrar_matriz():
     """
     Muestra los datos del tablero
     """
+    
     global mapa_juego
+    
     for columna in mapa_juego :
         print(columna)
+
+
+def estado_matriz():
+    """
+    Función que verifica qué contiene cada casilla de la
+    matriz, para decidir la cómo actuará la municipalidad.
+    """
+
+    global mapa_juego
+
+
+
+
+    return None
 
 
 def principal():
