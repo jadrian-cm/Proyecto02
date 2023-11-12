@@ -220,7 +220,6 @@ def mostrar_matriz():
         print(columna)
 
 
-<<<<<<< HEAD
 def menu_acciones():
     """
     Menu que le permite al usuario escoger 
@@ -294,7 +293,6 @@ def menu_sembrar_semilla():
 
     opcion = semillas[ int(opcion) ]
     print(opcion)
-=======
 def estado_matriz():
     """
     Función que verifica qué contiene cada casilla de la
@@ -307,7 +305,6 @@ def estado_matriz():
 
 
     return None
->>>>>>> d5810b9d33524ebc15900a5c6c924e6ed0892fc5
 
 
 def principal():
@@ -315,20 +312,12 @@ def principal():
 
     bienvenida()
     menú_principal()
-<<<<<<< HEAD
-    menu_dificultad()
+    # menu_dificultad()
     crear_matriz_aux()
     mostrar_matriz()
     # desvincularla del menú incial, ya que necesito llamarla cuando
     # la opción elegida es 1.
     # Mostrar ciudad (matriz)
-=======
-    # Aquí debería ir la función menú_dificultad, pero no sé cómo
-    # desvincularla del menú incial, ya que necesito llamarla cuando
-    # la opción elegida es 1.
-    # Mostrar ciudad (matriz)
-    mostrar_matriz()
->>>>>>> d5810b9d33524ebc15900a5c6c924e6ed0892fc5
 
 
 
