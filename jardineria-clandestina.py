@@ -227,6 +227,81 @@ def mostrar_matriz():
         print(columna)
 
 
+def menu_acciones():
+    """
+    Menu que le permite al usuario escoger 
+    su accion en el turno de juego
+    """
+    print("1: Sembrar una semmilla")
+    print("2: Sembrar una planta")
+    print("3: Crear una ciclovía")
+    
+    opcion = input("Opción: ")
+    
+    if not validar_opción(opcion, 1, 3) :
+        return menu_acciones
+
+
+def solicitar_coordenadas(opcion):
+    """
+    Menu que solicita al jugador el espacio donde
+    quiere efectuar la accion previamente seleccionada
+    """
+    global mapa_juego
+    
+    print("Inserte las coordenadas")
+    x = input("Espacio horizontal: ")
+    y = input("Espacio vertical: ")
+    
+    if not validar_opción(x, 0, len(mapa_juego)-1) or not validar_opción(y, 0, len(mapa_juego)-1):
+        return solicitar_coordenadas(opcion)
+
+
+def validar_opción(opcion, n1, n2):
+    """
+    Función para validar datos
+    """
+    
+    if not opcion.isdigit():
+        print("Solo de números")
+        return False
+    
+    if int(opcion) < n1 or int(opcion) > n2 :
+        print("Solo de números entre " + str(n1) + " y " + str(n2) )
+        return False
+    
+    return True
+
+
+def menu_sembrar_semilla():
+    """
+    Menu de la opción sembrar semillas
+    """
+    global semillas
+    print("¿Qué semilla desea plantar?")
+    print("No----------Nombre----------Carga----------Tiempo viva")
+    print()
+    print()
+    print("0-----------"+ str(semillas[0][0]) + "------------" + str(semillas[0][1]) + "-----------------" + str(semillas[0][2]) )
+    print()    
+    print("1-----------"+ str(semillas[1][0]) + "-----------" + str(semillas[1][1]) + "-----------------" + str(semillas[1][2]) )
+    print()    
+    print("2-----------"+ str(semillas[2][0]) + "-------------" + str(semillas[2][1]) + "-----------------" + str(semillas[2][2]) )
+    print()    
+    print("3-----------"+ str(semillas[3][0]) + "---------" + str(semillas[3][1]) + "-----------------" + str(semillas[3][2]) )
+    print()    
+    print("4-----------"+ str(semillas[4][0]) + "-------------" + str(semillas[4][1]) + "-----------------" + str(semillas[4][2]) )
+    print()
+    print()
+    
+    opcion = input("Número de planta: ")
+    if not validar_opción( opcion, 0, 4 ) :
+        return menu_sembrar_semilla()
+
+    opcion = semillas[ int(opcion) ]
+    print(opcion)
+
+
 def principal():
     bienvenida()
     menú_principal()
@@ -237,4 +312,6 @@ def principal():
     # la opción elegida es 1.
     # Mostrar ciudad (matriz)
 
-principal()
+
+
+
