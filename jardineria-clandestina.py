@@ -18,7 +18,6 @@
 # Algunos uft8icons de plantas: 🌰, 🌱, 🌷, 🌹, 🌺, 🌻, 🌼, 🥀
 
 import random
-import time
 
 # Semillas: [nombre, turnos para crecer, turnos vivas]
 semillas_facil = [
@@ -86,7 +85,6 @@ def menú_principal():
 
             if opción == 1:  # Iniciar juego
                 print("\033[2J\033[1;1f")
-                return menú_dificultad()
 
             elif opción == 2:  # Intrucciones
                 print("\033[2J\033[1;1f")
@@ -131,26 +129,28 @@ def menú_dificultad():
 
     dificultad = menú_dificultad_aux()
 
-    dificultad = int(dificultad)
+    # dificultad = int(dificultad)
 
-    if 1 <= dificultad <= 4:
-        if dificultad == 1:  # Fácil
-            print("\033[2J\033[1;1f")
-            return mostrar_matriz()
+    # if 1 <= dificultad <= 4:
+    #     if dificultad == 1:  # Fácil
+    #         print("\033[2J\033[1;1f")
+    #         return mostrar_matriz()
 
-        elif dificultad == 2:  # Normal
-            print("\033[2J\033[1;1f")
-            return mostrar_matriz()
+    #     elif dificultad == 2:  # Normal
+    #         print("\033[2J\033[1;1f")
+    #         return mostrar_matriz()
 
-        elif dificultad == 3:  # Difícil
-            print("\033[2J\033[1;1f")
-            return mostrar_matriz()
+    #     elif dificultad == 3:  # Difícil
+    #         print("\033[2J\033[1;1f")
+    #         return mostrar_matriz()
 
-        elif dificultad == 4:  # Personalizado
-            print("\033[2J\033[1;1f")
-            return mostrar_matriz()
-            # Aquí se llama a la función para setear el tamaño nxm
-            # de la matriz.
+    #     elif dificultad == 4:  # Personalizado
+    #         print("\033[2J\033[1;1f")
+    #         return mostrar_matriz()
+    #         # Aquí se llama a la función para setear el tamaño nxm
+    #         # de la matriz.
+
+    return dificultad
 
 
 def menú_dificultad_aux():
@@ -184,28 +184,28 @@ def crear_matriz_aux():
 
     # Dificuldades default
     if dificultad == 1:
+        print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(6, 6)
         semillas = semillas_facil
-        municipalidad(mapa_juego)
 
     elif dificultad == 2:
+        print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(10, 10)
         semillas = semillas_medio
-        municipalidad(mapa_juego)
 
     elif dificultad == 3:
+        print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(18, 18)
         semillas = semillas_dificil
-        municipalidad(mapa_juego)
 
     # Personalizadas
     elif dificultad == 4:
         # Validaciones
-        filas = input("\033[38;2;255;211;64m Número de filas: \033[0;m")
+        filas = input("\033[38;2;255;211;64m  Número de filas: \033[0;m")
         columnas = input("\033[38;2;255;211;64m Número de columnas: \033[0;m")
 
         if not filas.isdigit() or not columnas.isdigit():
-            print("\033[38;2;255;0;0m Solo puede ingresar números.\n \033[0;m")
+            print("\033[38;2;255;0;0mSolo puede ingresar números.\n \033[0;m")
             return crear_matriz_aux()
         
         if (int(filas) < 3 or int(filas) > 20 or
@@ -217,7 +217,6 @@ def crear_matriz_aux():
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(int(filas), int(columnas))
         semillas = semillas_medio
-        municipalidad(mapa_juego)
 
 
 def crear_matriz(filas, columnas):
@@ -232,11 +231,11 @@ def crear_matriz(filas, columnas):
         fila = []
 
         for _ in range(columnas):
-           fila.append("🟫")
+           fila.append("🟩")
         
         mapa_juego.append(fila)
 
-    # mapa_juego = [["🟫" for _ in range(columnas)] for _ in range(filas)]
+    # mapa_juego = [["🟩" for _ in range(columnas)] for _ in range(filas)]
 
     return mapa_juego
 
@@ -262,7 +261,7 @@ def menú_acciones():
     escoger una acción en el turno de juego.
     """
 
-    print("\033[38;2;255;211;64m [1] Sembrar una semmilla \033[0;m")
+    print("\033[38;2;255;211;64m [1] Sembrar una semilla \033[0;m")
     print("\033[38;2;255;211;64m [2] Sembrar una planta \033[0;m")
     print("\033[38;2;255;211;64m [3] Crear una ciclovía \033[0;m")
     print()
@@ -270,10 +269,12 @@ def menú_acciones():
     opción = input("\033[38;2;255;211;64m >> \033[0;m")
 
     if not validar_opción(opción, 1, 3):
-        return menú_acciones
+        return menú_acciones()
+    
+    return opción
 
 
-def solicitar_coordenadas(opción):
+def solicitar_coordenadas():
     """
     Función que muestra el menú que solicita al jugador
     el espacio donde quiere efectuar la acción previamente
@@ -289,7 +290,7 @@ def solicitar_coordenadas(opción):
 
     if (not validar_opción(x, 0, len(mapa_juego) - 1) or
         not validar_opción(y, 0, len(mapa_juego) - 1)):
-        return solicitar_coordenadas(opción)
+        return solicitar_coordenadas()
 
 
 def validar_opción(opción, n1, n2):
@@ -375,8 +376,18 @@ def menú_sembrar_semilla():
         return menú_sembrar_semilla()
 
     opción = semillas[int(opción)]
-    print(opción)
 
+    return opción
+
+
+def modificar_matriz():
+    """
+    ...
+    """
+
+    return None
+
+# Luego mostrar la matriz actualizada y el menú de acciones
 
 # Estados a programar:
 #  + Si en la posición mapa_juego[i][j] hay una semilla:
@@ -411,12 +422,11 @@ def municipalidad(matriz):
     arranca plantas.
     """
 
-    filas = len(mapa_juego)
-    columnas = len(mapa_juego[0])
+    filas = len(matriz)
+    columnas = len(matriz[0])
 
     # Agrega concreto aleatoriamente entre 0 y n/2 filas.
     cantidad_concreto = random.randint(0, filas // 2)
-    
     for _ in range(cantidad_concreto):
         fila = random.randint(0, filas - 1)
         columna = random.randint(0, columnas - 1)
@@ -432,7 +442,7 @@ def municipalidad(matriz):
     for i in range(filas):
         for j in range(columnas):
             if matriz[i][j] == "🚵":
-                matriz[i][j] = "🟫"
+                matriz[i][j] = "🟩"
 
     # Reemplaza la planta con concreto
     for i in range(filas):
@@ -441,6 +451,14 @@ def municipalidad(matriz):
                 matriz[i][j] = "🔳"
 
     return matriz
+
+
+def manejador_juego():
+    menú_acciones()
+    solicitar_coordenadas()
+    menú_sembrar_semilla()
+
+    return None
 
 
 def principal():
@@ -452,9 +470,10 @@ def principal():
 
     bienvenida()
     menú_principal()
-    # menú_dificultad()
+    menú_dificultad()
     crear_matriz_aux()
     mostrar_matriz()
+    manejador_juego()
     # desvincularla del menú incial, ya que necesito llamarla cuando
     # la opción elegida es 1.
     # Mostrar ciudad (matriz)
