@@ -44,6 +44,7 @@ semillas_dificil = [
 semillas = []
 
 # Falta la lista de las plantas
+plantas = []
 
 dificultad = 0  # Nivel de dificultad
 mapa_juego = []  # Matriz que representa la ciudad
@@ -210,15 +211,13 @@ def crear_matriz(filas, columnas):
 
     global mapa_juego
 
+    mapa_juego = []
+
+    # Llena la matriz con filas y columnas utilizando
+    # listas por comprensión.
     for _ in range(filas):
-        fila = []
-
-        for _ in range(columnas):
-           fila.append("🟫")
-        
-        mapa_juego.append(fila)
-
-    # mapa_juego = [["🟫" for _ in range(columnas)] for _ in range(filas)]
+        fila = ["🟫"] * columnas
+        mapa_juego += [fila]
 
     return mapa_juego
 
@@ -233,7 +232,7 @@ def mostrar_matriz():
     for fila in mapa_juego:
         for elemento in fila:
             print(elemento, end="")
-        print()  # Salto de línea después de cada fila.
+        print()  # Salto de línea después de cada fila
 
     print()
 
@@ -257,26 +256,6 @@ def menú_acciones():
     return opción
 
 
-def solicitar_coordenadas():
-    """
-    Función que muestra el menú que solicita al jugador
-    el espacio donde quiere efectuar la acción previamente
-    seleccionada.
-    """
-
-    global mapa_juego
-
-    print()
-    print("\033[38;2;255;211;64m" + "Inserte las coordenadas" + "\033[0;m")
-
-    x = input("\033[38;2;255;211;64m" + "Coordenada x: " + "\033[0;m")
-    y = input("\033[38;2;255;211;64m" + "Coordenada y: " + "\033[0;m")
-
-    if (not validar_opción(x, 0, len(mapa_juego) - 1) or
-        not validar_opción(y, 0, len(mapa_juego) - 1)):
-        return solicitar_coordenadas()
-
-
 def menú_sembrar_semilla():
     """
     Función que muestra el menú de la opción sembrar
@@ -286,7 +265,7 @@ def menú_sembrar_semilla():
     global semillas
 
     print()
-    print("\033[38;2;255;211;64m" + "¿Qué semilla desea plantar?\n" + "\033[0;m")
+    print("\033[38;2;255;211;64m" + "¿Qué semilla deseas plantar?\n" + "\033[0;m")
     print(
         "\033[38;2;255;211;64m" +
         "No----------Nombre----------Carga----------Tiempo viva" +
@@ -335,14 +314,36 @@ def menú_sembrar_semilla():
     print()
     print()
 
-    opción = input("\033[38;2;255;211;64m" + "Número de planta: " + "\033[0;m")
+    número_semilla = input("\033[38;2;255;211;64m" + "Número de planta: " + "\033[0;m")
 
-    if not validar_opción(opción, 0, 4):
+    if not validar_opción(número_semilla, 0, 4):
         return menú_sembrar_semilla()
 
-    opción = semillas[int(opción)]
+    número_semilla = semillas[int(número_semilla)]
 
-    return opción
+    return número_semilla
+
+
+def solicitar_coordenadas():
+    """
+    Función que muestra el menú que solicita al jugador
+    el espacio donde quiere efectuar la acción previamente
+    seleccionada.
+    """
+
+    global mapa_juego
+
+    print()
+    print("\033[38;2;255;211;64m" + "Inserte las coordenadas" + "\033[0;m")
+
+    x = input("\033[38;2;255;211;64m" + "Coordenada x: " + "\033[0;m")
+    y = input("\033[38;2;255;211;64m" + "Coordenada y: " + "\033[0;m")
+
+    print()
+
+    if (not validar_opción(x, 0, len(mapa_juego) - 1) or
+        not validar_opción(y, 0, len(mapa_juego) - 1)):
+        return solicitar_coordenadas()
 
 
 def validar_opción(opción, num1, num2):
@@ -356,8 +357,9 @@ def validar_opción(opción, num1, num2):
 
     if int(opción) < num1 or int(opción) > num2:
         print(
-            "\033[38;2;255;0;0m" + "Solo números entre " +
-            str(num1) + " y " + str(num2) + ".\n" + "\033[0;m"
+            "\033[38;2;255;0;0m" +
+            "Solo números entre " + str(num1) + " y " + str(num2) + ".\n" +
+            "\033[0;m"
         )
         return False
 
@@ -375,28 +377,11 @@ def modificar_matriz():
 
 # Estados a programar:
 #  + Si en la posición mapa_juego[i][j] hay una semilla:
-#     - La municipalidad puede construir
+#     -> La municipalidad puede construir
 #  + Si en la posición mapa_juego[i][j] hay una planta:
 #     - La municipalidad puede arrancarla y construir
 #  + Si en la posición mapa_juego[i][j] hay una ciclovía:
 #     - La municipalidad puede destruirla y en otro turno construir
-
-
-# def verificar_estado_matriz(matriz):
-#     """
-#     Función que verifica qué hay en cada posición de la
-#     matriz, para decidir cómo debe proceder el jugador
-#     y la municipalidad.
-#     """
-
-#     filas = len(matriz)
-#     columnas = len(matriz[0])
-
-#     for i in range(filas):
-#         for j in range(columnas):
-#             elemento = matriz[i][j]
-
-#     return elemento
 
 
 def municipalidad(matriz):
@@ -409,7 +394,7 @@ def municipalidad(matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
 
-    # Agrega concreto aleatoriamente entre 0 y n//2 filas.
+    # Agrega concreto aleatoriamente entre 0 y n // 2 filas
     cantidad_concreto = random.randint(0, filas // 2)
     for _ in range(cantidad_concreto):
         fila = random.randint(0, filas - 1)
@@ -444,7 +429,7 @@ def verificar_fin_juego(matriz):
 
     # Verifica filas
     for fila in matriz:
-        if contar_objeto("🌹", fila=fila) == len(fila):
+        if contar_objeto("1", fila=fila) == len(fila):
             print(
                 "\033[38;2;0;255;0m" +
                 "¡Has ganado! Toda una fila contiene plantas." +
@@ -482,7 +467,7 @@ def verificar_fin_juego(matriz):
         
         # Falta verificar diagonales (esto sería puntos extras)
 
-    return False  # El juego aún no ha terminado.
+    return False  # El juego aún no ha terminado
 
 
 def contar_objeto(objeto, fila=None, columna=None):
@@ -524,11 +509,9 @@ def nueva_partida():
     la función principal si se quiere continuar.
     """
 
-    decisión = input(
-                    "\033[38;2;255;211;64m" +
-                    "¿Deseas jugar otra partida? Sí/No o S/N: " +
-                    "\033[0;m"
-                )
+    decisión = input("\033[38;2;255;211;64m" +
+                     "¿Deseas jugar otra partida? Sí/No o S/N: " +
+                     "\033[0;m")
 
     if type(decisión) != str:
         print(
@@ -553,8 +536,8 @@ def nueva_partida():
 
 def manejador_juego():
     menú_acciones()
-    solicitar_coordenadas()
     menú_sembrar_semilla()
+    solicitar_coordenadas()
 
 
 def principal():
