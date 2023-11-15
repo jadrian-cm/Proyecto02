@@ -277,25 +277,6 @@ def solicitar_coordenadas():
         return solicitar_coordenadas()
 
 
-def validar_opción(opción, num1, num2):
-    """
-    Función que valida datos.
-    """
-
-    if not opción.isdigit():
-        print("\033[38;2;255;0;0m" + "Solo puede ingresar números.\n" + "\033[0;m")
-        return False
-
-    if int(opción) < num1 or int(opción) > num2:
-        print(
-            "\033[38;2;255;0;0m" + "Solo números entre " +
-            str(num1) + " y " + str(num2) + ".\n" + "\033[0;m"
-        )
-        return False
-
-    return True
-
-
 def menú_sembrar_semilla():
     """
     Función que muestra el menú de la opción sembrar
@@ -362,6 +343,25 @@ def menú_sembrar_semilla():
     opción = semillas[int(opción)]
 
     return opción
+
+
+def validar_opción(opción, num1, num2):
+    """
+    Función que valida datos.
+    """
+
+    if not opción.isdigit():
+        print("\033[38;2;255;0;0m" + "Solo puede ingresar números.\n" + "\033[0;m")
+        return False
+
+    if int(opción) < num1 or int(opción) > num2:
+        print(
+            "\033[38;2;255;0;0m" + "Solo números entre " +
+            str(num1) + " y " + str(num2) + ".\n" + "\033[0;m"
+        )
+        return False
+
+    return True
 
 
 def modificar_matriz():
