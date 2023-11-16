@@ -20,7 +20,7 @@
 import random
 
 # Semillas: [nombre, turnos para crecer, turnos vivas]
-semillas_facil = [
+semillas_fácil = [
     ["cosmos", 2],
     ["zinias", 3],
     ["salvias", 2],
@@ -34,7 +34,7 @@ semillas_medio = [
     ["tulipanes", 4],
     ["mamón chino", 4],
 ]
-semillas_dificil = [
+semillas_difícil = [
     ["girasoles", 4, 9],
     ["papas", 5, 15],
     ["vinca", 5, 15],
@@ -114,7 +114,7 @@ def menú_dificultad():
     print("\033[38;2;255;211;64m" + "│                                      │" + "\033[0;m")
     print("\033[38;2;255;211;64m" + "│  [1] Fácil                           │" + "\033[0;m")
     print("\033[38;2;255;211;64m" + "│  [2] Normal                          │" + "\033[0;m")
-    print("\033[38;2;255;211;64m" + "│  [3] Díficil                         │" + "\033[0;m")
+    print("\033[38;2;255;211;64m" + "│  [3] Difícil                         │" + "\033[0;m")
     print("\033[38;2;255;211;64m" + "│  [4] Personalizado                   │" + "\033[0;m")
     print("\033[38;2;255;211;64m" + "│                                      │" + "\033[0;m")
     print("\033[38;2;255;211;64m" + "└──────────────────────────────────────┘" + "\033[0;m")
@@ -175,7 +175,7 @@ def crear_matriz_aux():
     if dificultad == 1:
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(6, 6)
-        semillas = semillas_facil
+        semillas = semillas_fácil
 
     elif dificultad == 2:
         print("\033[2J\033[1;1f")
@@ -185,7 +185,7 @@ def crear_matriz_aux():
     elif dificultad == 3:
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(18, 18)
-        semillas = semillas_dificil
+        semillas = semillas_difícil
 
     # Personalizadas
     elif dificultad == 4:
@@ -379,9 +379,9 @@ def modificar_matriz():
 #  + Si en la posición mapa_juego[i][j] hay una semilla:
 #     -> La municipalidad puede construir
 #  + Si en la posición mapa_juego[i][j] hay una planta:
-#     - La municipalidad puede arrancarla y construir
+#     -> La municipalidad puede arrancarla y construir
 #  + Si en la posición mapa_juego[i][j] hay una ciclovía:
-#     - La municipalidad puede destruirla y en otro turno construir
+#     -> La municipalidad puede destruirla y en otro turno construir
 
 
 def municipalidad(matriz):
@@ -429,10 +429,10 @@ def verificar_fin_juego(matriz):
 
     # Verifica filas
     for fila in matriz:
-        if contar_objeto("1", fila=fila) == len(fila):
+        if contar_objeto("🌹", fila=fila) == len(fila):
             print(
                 "\033[38;2;0;255;0m" +
-                "¡Has ganado! Toda una fila contiene plantas." +
+                f"¡Has ganado! La fila {fila} solo contiene plantas." +
                 "\033[0;m"
             )
             return True
@@ -440,7 +440,7 @@ def verificar_fin_juego(matriz):
         elif contar_objeto("🔳", fila=fila) == len(fila):
             print(
                 "\033[38;2;255;0;0m" +
-                "¡Has perdido! Toda una fila contiene concreto." +
+                f"¡Has perdido! La fila {fila} solo contiene concreto." +
                 "\033[0;m"
             )
             return False
@@ -452,7 +452,7 @@ def verificar_fin_juego(matriz):
         if contar_objeto("🌹", columna=columna) == len(columna):
             print(
                 "\033[38;2;0;255;0m" +
-                "¡Has ganado! Toda una columna contiene plantas." +
+                f"¡Has ganado! La columna {columna} solo contiene plantas." +
                 "\033[0;m"
             )
             return True
@@ -460,7 +460,7 @@ def verificar_fin_juego(matriz):
         elif contar_objeto("🔳", columna=columna) == len(columna):
             print(
                 "\033[38;2;255;0;0m" +
-                "¡Has perdido! Toda una columna contiene concreto." +
+                f"¡Has perdido! La columna {columna} solo contiene concreto." +
                 "\033[0;m"
             )
             return False
