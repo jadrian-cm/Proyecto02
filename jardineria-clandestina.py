@@ -20,26 +20,26 @@
 import random
 
 # Semillas: [nombre, turnos para crecer, turnos vivas]
-semillas_fácil = [
-    ["cosmos", 2],
-    ["zinias", 3],
-    ["salvias", 2],
-    ["kiri", 3],
-    ["herbaceas", 2],
+semillas_facil = [
+    ["zinias", 2, 8],
+    ["cerezos", 3, 12],
+    ["tulipanes", 2, 8],
+    ["rosas", 3, 12],
+    ["mamón chino", 2, 3],
 ]
 semillas_medio = [
-    ["cerezo", 4],
-    ["tomate", 3],
-    ["rosas", 3],
-    ["tulipanes", 4],
-    ["mamón chino", 4],
+    ["zinias", 4, 10],
+    ["cerezos", 3, 8],
+    ["tulipanes", 3, 8],
+    ["rosas", 4, 10],
+    ["mamón chino", 4, 10],
 ]
-semillas_difícil = [
-    ["girasoles", 4, 9],
-    ["papas", 5, 15],
-    ["vinca", 5, 15],
-    ["lirio", 5, 15],
-    ["dedalera", 6, 25],
+semillas_dificil = [
+    ["zinias", 4, 9],
+    ["cerezos", 5, 13],
+    ["tulipanes", 5, 13],
+    ["rosas", 5, 13],
+    ["mamón chino", 6, 22],
 ]
 semillas = []
 
@@ -253,7 +253,7 @@ def menú_acciones():
     if not validar_opción(opción, 1, 3):
         return menú_acciones()
     
-    return opción
+    return int(opción)
 
 
 def menú_sembrar_semilla():
@@ -345,6 +345,8 @@ def solicitar_coordenadas():
         not validar_opción(y, 0, len(mapa_juego) - 1)):
         return solicitar_coordenadas()
 
+    return int(x), int(y)
+
 
 def validar_opción(opción, num1, num2):
     """
@@ -365,13 +367,6 @@ def validar_opción(opción, num1, num2):
 
     return True
 
-
-def modificar_matriz():
-    """
-    ...
-    """
-
-    return None
 
 # Luego mostrar la matriz actualizada y el menú de acciones
 
@@ -401,11 +396,11 @@ def municipalidad(matriz):
         columna = random.randint(0, columnas - 1)
         matriz[fila][columna] = "🔳"
 
-    # Reemplaza la semilla con concreto
+    # Deja la semilla como esta
     for i in range(filas):
         for j in range(columnas):
             if matriz[i][j] == "🌱":
-                matriz[i][j] = "🔳"
+                pass
 
     # Reemplaza la ciclovía con tierra
     for i in range(filas):
@@ -416,7 +411,7 @@ def municipalidad(matriz):
     # Reemplaza la planta con concreto
     for i in range(filas):
         for j in range(columnas):
-            if matriz[i][j] == "🌹":
+            if matriz[i][j]  in tipo_plantas:
                 matriz[i][j] = "🔳"
 
     return matriz
@@ -429,10 +424,10 @@ def verificar_fin_juego(matriz):
 
     # Verifica filas
     for fila in matriz:
-        if contar_objeto("🌹", fila=fila) == len(fila):
+        if contar_objeto("1", fila=fila) == len(fila):
             print(
                 "\033[38;2;0;255;0m" +
-                f"¡Has ganado! La fila {fila} solo contiene plantas." +
+                "¡Has ganado! Toda una fila contiene plantas." +
                 "\033[0;m"
             )
             return True
@@ -440,7 +435,7 @@ def verificar_fin_juego(matriz):
         elif contar_objeto("🔳", fila=fila) == len(fila):
             print(
                 "\033[38;2;255;0;0m" +
-                f"¡Has perdido! La fila {fila} solo contiene concreto." +
+                "¡Has perdido! Toda una fila contiene concreto." +
                 "\033[0;m"
             )
             return False
@@ -452,7 +447,7 @@ def verificar_fin_juego(matriz):
         if contar_objeto("🌹", columna=columna) == len(columna):
             print(
                 "\033[38;2;0;255;0m" +
-                f"¡Has ganado! La columna {columna} solo contiene plantas." +
+                "¡Has ganado! Toda una columna contiene plantas." +
                 "\033[0;m"
             )
             return True
@@ -460,7 +455,7 @@ def verificar_fin_juego(matriz):
         elif contar_objeto("🔳", columna=columna) == len(columna):
             print(
                 "\033[38;2;255;0;0m" +
-                f"¡Has perdido! La columna {columna} solo contiene concreto." +
+                "¡Has perdido! Toda una columna contiene concreto." +
                 "\033[0;m"
             )
             return False
@@ -535,27 +530,186 @@ def nueva_partida():
 
 
 def manejador_juego():
-    menú_acciones()
-    menú_sembrar_semilla()
-    solicitar_coordenadas()
-
+    while True:
+        mostrar_matriz()
+        opcion = menú_acciones()
+        if opcion == 1 :
+            menu_semillas_aux()
+        if opcion == 2:
+            print("sembrar planta")
+        if opcion == 3 :
+            print("solicitar ciclovia")
+        cambiar_matiz_aux()
+        
 
 def principal():
     """
     Función que se encarga de inicializar el juego.
     """
 
-    global dificultad
+    global dificultad, mapa_juego, mapa_juego_aux
 
     bienvenida()
     menú_principal()
     menú_dificultad()
     crear_matriz_aux()
-    mostrar_matriz()
+    mapa_juego_aux = mapa_juego.copy()
     manejador_juego()
     # desvincularla del menú incial, ya que necesito llamarla cuando
     # la opción elegida es 1.
     # Mostrar ciudad (matriz)
 
 
+
+
+
+
+######################################### NUEVO  
+import copy
+tipo_semillas = ["zinias", "cerezos", "tulipanes", "rosas", "mamón chino" ]
+tipo_plantas = ["🌷", "🌹", "🌺", "🌻", "🌼", "🥀"]
+mapa_juego_aux = [] 
+
+
+def validar_posicion(x, y, objeto):
+    """
+    Valida que un objeto se pueda poner en 
+    una posición en la matriz
+    """
+    global mapa_juego_aux, tipo_plantas, tipo_semillas, mapa_juego
+    # Verdadero inmmediato
+    if mapa_juego_aux[x][y] == "🟫" :
+        return  True
+
+    if objeto in tipo_plantas :
+        return True
+    
+    # Validar semillas
+    if objeto in tipo_semillas:
+
+        if isinstance(mapa_juego_aux[x][y], list ) :
+            return False
+
+        if mapa_juego_aux[x][y] != "🔳" and objeto in tipo_semillas  :       
+            return True
+    
+        if mapa_juego_aux[x][y] == "🔳" and objeto in tipo_semillas  :
+            return False
+    
+    # Validar ciclovias
+    if objeto == "🚵" :
+
+        if mapa_juego[x][y] in tipo_plantas :
+            return False
+     
+        if mapa_juego[x][y] in tipo_semillas :       
+            return False
+    
+        if mapa_juego[x][y] == "🚵" :
+            return False
+
+        if  mapa_juego[x][y] == "🔳" :
+            return True
+        
+
+def planta_crece(datos_objeto, x, y):
+    """
+    Actualiza los turnos faltantes para
+    que una planta crezca
+    """
+    global tipo_plantas
+    turnos_a_crecer = datos_objeto[1] -1
+    
+    # En caso de que ya haya crecido
+    if turnos_a_crecer == 0 :
+        cambiar_matriz_visual("🌻", x, y)
+        return [tipo_plantas[0], 0, datos_objeto[2]]
+
+    # En caso de que aún no haya crecido
+    else :
+        return [datos_objeto[0], turnos_a_crecer, datos_objeto[2]]
+
+
+def planta_muere(datos_objetos, x, y):
+    """
+    Actualiza los turnos faltantes para que
+    una planta muera
+    """
+    global tipo_plantas
+
+    turnos_a_morir = datos_objetos - 1
+    if turnos_a_morir == 0 :
+        cambiar_matriz_visual("🥀", x, y )
+        return "🟫"
+    else:
+        return [datos_objetos[0], 0, turnos_a_morir]
+
+
+def cambiar_matiz_aux():
+    """
+    Actualiza los datos de la matriz normal y auxiliar
+    """
+    global mapa_juego_aux, tipo_plantas, tipo_semillas
+    y= 0
+    for columna in mapa_juego_aux:
+        x = 0
+        for fila in columna:
+            if not isinstance(fila, list) :
+                x += 1
+                pass
+            else:
+                if fila[0] in tipo_semillas :
+                    mapa_juego_aux[y][x] = planta_crece(fila, x, y)
+                    x += 1
+                    break
+
+                if fila[0] in tipo_plantas :
+                    mapa_juego[y][x] = planta_muere(fila, x, y)
+                    x += 1
+                    break
+
+                if fila[0] == "🚵" :
+                    extender_ciclovia(fila, x, y)
+        y += 1
+
+def cambiar_matriz_visual(icono, x, y):
+    global mapa_juego
+    mapa_juego[y][x] = icono
+
+
+
+def extender_ciclovia(datos, x, y):
+    """
+    expande las ciclovias
+    """
+    global mapa_juego_aux
+    if datos[1] == "h" and validar_posicion(y, x-1, "🚵") :
+        mapa_juego_aux[y][x-1] == ["🚵", "h"]
+        cambiar_matriz_visual("🚵", x-1, y)
+    
+    if datos[1] == "v" and validar_posicion(y-1, x, "🚵") :
+        mapa_juego_aux[y-1][x] == ["🚵", "v"]
+        cambiar_matriz_visual("🚵", x, y-1)
+
+
+def menu_semillas_aux():
+    """
+    Menu que se encarga de los procesos para
+    sembrar semillas
+    """
+    global semillas, mapa_juego_aux
+    semilla = menú_sembrar_semilla()
+    x, y = solicitar_coordenadas()
+
+    if not validar_posicion(x, y, semilla[0]):
+        return menu_semillas_aux
+    
+    mapa_juego_aux[y][x] = semilla
+    cambiar_matriz_visual( "🌱", x, y )
+
+
+
+
+
 principal()
+
