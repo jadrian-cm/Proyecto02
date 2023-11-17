@@ -145,7 +145,7 @@ def crear_matriz_aux():
     """
 
     global dificultad
-    
+    global mapa_juego
     global semillas
 
     # Dificuldades por defecto
@@ -174,13 +174,12 @@ def crear_matriz_aux():
         
         if (not validar_opción(filas, 3, 20) or
             not validar_opción(columnas, 3, 20)):
-            
-            mapa_juego = crear_matriz_aux()
-            return mapa_juego
+            return crear_matriz_aux()
         
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(int(filas), int(columnas))
         semillas = semillas_medio
+        return mapa_juego
 
 
 def crear_matriz(filas, columnas):
@@ -346,15 +345,6 @@ def validar_opción(opción, num1, num2):
         return False
 
     return True
-
-
-# Estados a programar:
-#  + Si en la posición mapa_juego[i][j] hay una semilla:
-#     -> La municipalidad puede construir
-#  + Si en la posición mapa_juego[i][j] hay una planta:
-#     -> La municipalidad puede arrancarla y construir
-#  + Si en la posición mapa_juego[i][j] hay una ciclovía:
-#     -> La municipalidad puede destruirla y en otro turno construir
 
 
 def municipalidad(matriz):
@@ -567,7 +557,7 @@ def cambiar_matriz_aux():
                     break
 
                 if fila[0] in tipo_plantas :
-                    mapa_juego[y][x] = planta_muere(fila, x, y)
+                    mapa_juego_aux[y][x] = planta_muere(fila, x, y)
                     x += 1
                     break
 
@@ -616,15 +606,14 @@ def menú_semillas_aux():
     semilla = menú_sembrar_semilla()
     x, y = solicitar_coordenadas()
 
-    if not validar_posición(x, y, semillas[0]):
+    if not validar_posición(x, y, semilla[0]):
         return menú_semillas_aux()
     
     cambiar_matriz_visual("🌹", x, y)
     mapa_juego_aux[y][x] = semilla
     
 
-
-def sembrar_planta():
+def menú_sembrar_planta():
     """
     Función que se encarga de sembrar una planta.
     """
@@ -633,6 +622,10 @@ def sembrar_planta():
 
     x, y = solicitar_coordenadas()
 
+    if not validar_posición(x, y, "🌹") :
+        return menú_sembrar_planta()
+    
+    
     mapa_juego_aux[y][x] = "🌹"
     cambiar_matriz_visual("🌹", x, y)
 
@@ -662,7 +655,7 @@ def menú_ciclovías():
         print("Solo seleccione h/v")
     # Parte de efectuar cambios
     if not validar_posición(x, y, "🚵") :
-        return menú_ciclovías
+        return menú_ciclovías()
     
     cambiar_matriz_visual("🚵", x, y)
     mapa_juego_aux[y][x] == dato
@@ -721,7 +714,7 @@ def manejador_juego():
             menú_semillas_aux()
         
         if opción == 2:
-            sembrar_planta()
+            menú_sembrar_planta()
         
         if opción == 3:
            menú_ciclovías()
