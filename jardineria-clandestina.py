@@ -78,33 +78,22 @@ def menú_principal():
 
         elif int(opción) == 2:  # Instrucciones
             print("\033[2J\033[1;1f")
-            print("\nInstrucciones")
-            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/ETG5JjSUJjpFqQQ2OQJEswUBAO3tgFDgrxe0bYaPrACQ6g?e=ThOhxC")
+            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/EVcp2YIaCfVCjt6CMes4HewBDjxhl0FxdGQVsFmbIrhfsQ?e=royzHo")
             return principal()
 
         elif int(opción) == 3:  # Solarpunk y jardinería clandestina
             print("\033[2J\033[1;1f")
-            print("\nSolarpunk y jardinería clandestina\n")
-            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/ETG5JjSUJjpFqQQ2OQJEswUBAO3tgFDgrxe0bYaPrACQ6g?e=ThOhxC")
+            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/EetgVrxYij9PjV59zdPiRkcBehZQzRZ-IWTyj_QnQi7FMg?e=vsLffQ")
             return principal()
 
 
 def mostrar_contenido(url):
     """
-
+    Función que abre una nueva pestaña en el navegador web
+    con la URL proporcionada como parámetro.
     """
     
     webbrowser.open_new(url)
-
-
-# def mostrar_contenido(url):
-#     respuesta = requests.get(url)
-    
-#     if respuesta.status_code == 200:
-#         print(respuesta.text)
-    
-#     else:
-#         print("No se pudo obtener el archivo. Código de estado:", respuesta.status_code)
 
 
 def menú_dificultad():
@@ -254,7 +243,7 @@ def menú_sembrar_semilla():
     print("\033[38;2;255;211;64m" + "¿Qué semilla deseas plantar?\n" + "\033[0;m")
     print(
         "\033[38;2;255;211;64m" +
-        "No----------Nombre----------Carga----------Tiempo viva" +
+        "N°----------Nombre----------Carga----------Tiempo viva" +
         "\033[0;m"
     )
     print()
@@ -300,7 +289,7 @@ def menú_sembrar_semilla():
     print()
     print()
 
-    número_semilla = input("\033[38;2;255;211;64m" + "Número de planta: " + "\033[0;m")
+    número_semilla = input("\033[38;2;255;211;64m" + "Número de semilla: " + "\033[0;m")
 
     if not validar_opción(número_semilla, 0, 4):
         return menú_sembrar_semilla()
@@ -618,7 +607,7 @@ def extender_ciclovía(datos, x, y):
     if datos[1] == "h" and validar_posición(y, x - 1, "🚵"):
         mapa_juego_aux[y][x - 1] == ["🚵", "h"]
         cambiar_matriz_visual("🚵", x - 1, y)
-    
+
     if datos[1] == "v" and validar_posición(y - 1, x, "🚵"):
         mapa_juego_aux[y - 1][x] == ["🚵", "v"]
         cambiar_matriz_visual("🚵", x, y - 1)
@@ -636,11 +625,24 @@ def menú_semillas_aux():
     semilla = menú_sembrar_semilla()
     x, y = solicitar_coordenadas()
 
-    if not validar_posición(x, y, semilla[0]):
-        return menú_semillas_aux
+    if not validar_posición(x, y, semillas[0]):
+        return menú_semillas_aux()
     
     mapa_juego_aux[y][x] = semilla
     cambiar_matriz_visual("🌱", x, y)
+
+
+def sembrar_planta():
+    """
+    Función que se encarga de sembrar una planta.
+    """
+
+    global mapa_juego_aux
+
+    x, y = solicitar_coordenadas()
+
+    mapa_juego_aux[y][x] = "🌹"
+    cambiar_matriz_visual("🌹", x, y)
 
 
 def nueva_partida():
@@ -655,26 +657,27 @@ def nueva_partida():
         "¿Deseas jugar otra partida? Sí/No o S/N: " +
         "\033[0;m"
     )
+    
+    if type(decisión) == str:
+        if decisión == "Sí" or decisión == "S":
+            print("\033[2J\033[1;1f")
+            return principal()
 
-    if type(decisión) != str:
+        elif decisión == "No" or decisión == "N":
+            print(
+                "\033[38;2;0;255;0m" +
+                "Gracias por jugar. ¡Vuelve pronto!\n" +
+                "\033[0;m"
+            )
+            return exit()
+    
+    else:
         print(
             "\033[38;2;255;0;0m" +
             "Solo puedes ingresar Sí/No o S/N.\n" +
             "\033[0;m"
         )
         return nueva_partida()
-   
-    if decisión == "Sí" or decisión == "S":
-        print("\033[2J\033[1;1f")
-        return principal()
-
-    elif decisión == "No" or decisión == "N":
-        print(
-            "\033[38;2;0;255;0m" +
-            "Gracias por jugar. ¡Vuelve pronto!\n" +
-            "\033[0;m"
-        )
-        return exit()
 
 
 def manejador_juego():
@@ -695,7 +698,7 @@ def manejador_juego():
             menú_semillas_aux()
         
         if opción == 2:
-            print("Sembrar planta")
+            sembrar_planta()
         
         if opción == 3:
             print("Solicitar ciclovía")
