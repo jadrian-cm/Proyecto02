@@ -1,3 +1,1 @@
-INSTRUCCIONES
-
-1. ...
+1. ¡Hola mundo!

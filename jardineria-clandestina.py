@@ -4,21 +4,10 @@
 # Bryan Fernández Sánchez, 2023131084
 # José Carballo Martínez, 2019046749
 
-# Pseudoesquema:
-# Menú Inicial: Iniciar juego, instrucciones y solarpunk y jardinería clandestina
-# Menú Dificultad: Fácil, medio, díficil y personalizado
-# Mostrar matriz, que sería la ciudad
-# Menú para las acciones: Planta, Semilla y Ciclovía
-# Actualizar matriz
-# Programar la municipalidad:
-# - Establecer estados
-# - Crear función que verifique el estado de la matriz
-# Crear función para verificar game over
-# Preguntar si se quiere jugar de nuevo
-# Algunos uft8icons de plantas: 🌰, 🌱, 🌷, 🌹, 🌺, 🌻, 🌼, 🥀
-
 import random
 import copy
+import webbrowser
+
 
 # Semillas: [nombre, turnos para crecer, turnos vivas]
 semillas_fácil = [
@@ -44,11 +33,12 @@ semillas_difícil = [
 ]
 semillas = []
 
-# Falta la lista de las plantas
-plantas = []
-
 dificultad = 0  # Nivel de dificultad
 mapa_juego = []  # Matriz que representa la ciudad
+
+tipo_semillas = ["zinias", "cerezos", "tulipanes", "rosas", "mamón chino"]
+tipo_plantas = ["🌷", "🌹", "🌺", "🌻", "🌼", "🥀"]
+mapa_juego_aux = []
 
 
 def bienvenida():
@@ -88,15 +78,33 @@ def menú_principal():
 
         elif int(opción) == 2:  # Instrucciones
             print("\033[2J\033[1;1f")
-            print("\nInstrucciones\n")  
-            # Aquí se debe agregar el archivo de instrucciones
-            # Agregar opción para volver al menú principal
+            print("\nInstrucciones")
+            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/ETG5JjSUJjpFqQQ2OQJEswUBAO3tgFDgrxe0bYaPrACQ6g?e=ThOhxC")
+            return principal()
 
         elif int(opción) == 3:  # Solarpunk y jardinería clandestina
             print("\033[2J\033[1;1f")
             print("\nSolarpunk y jardinería clandestina\n")
-            # Aquí debe ir el archivo sobre jardinería clandestina
-            # Agregar opción para volver al menú principal
+            mostrar_contenido("https://estudianteccr-my.sharepoint.com/:b:/g/personal/jadriecmmv_estudiantec_cr/ETG5JjSUJjpFqQQ2OQJEswUBAO3tgFDgrxe0bYaPrACQ6g?e=ThOhxC")
+            return principal()
+
+
+def mostrar_contenido(url):
+    """
+
+    """
+    
+    webbrowser.open_new(url)
+
+
+# def mostrar_contenido(url):
+#     respuesta = requests.get(url)
+    
+#     if respuesta.status_code == 200:
+#         print(respuesta.text)
+    
+#     else:
+#         print("No se pudo obtener el archivo. Código de estado:", respuesta.status_code)
 
 
 def menú_dificultad():
@@ -323,7 +331,7 @@ def solicitar_coordenadas():
         not validar_opción(y, 0, len(mapa_juego) - 1)):
         return solicitar_coordenadas()
 
-    return int(x), int(y)
+    return int(y), int(x)
 
 
 def validar_opción(opción, num1, num2):
@@ -365,13 +373,6 @@ def municipalidad(matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
 
-    # Agrega concreto aleatoriamente entre 0 y filas // 2
-    cantidad_concreto = random.randint(0, filas // 2)
-    for _ in range(cantidad_concreto):
-        fila = random.randint(0, filas - 1)
-        columna = random.randint(0, columnas - 1)
-        matriz[fila][columna] = "🔳"
-
     # Deja la semilla como está
     for i in range(filas):
         for j in range(columnas):
@@ -390,6 +391,13 @@ def municipalidad(matriz):
             if matriz[i][j]  in tipo_plantas:
                 matriz[i][j] = "🔳"
 
+    # Agrega concreto aleatoriamente entre 0 y filas // 2
+    cantidad_concreto = random.randint(0, filas // 2)
+    for _ in range(cantidad_concreto):
+        fila = random.randint(0, filas - 1)
+        columna = random.randint(0, columnas - 1)
+        matriz[fila][columna] = "🔳"
+
     return matriz
 
 
@@ -400,7 +408,7 @@ def verificar_fin_juego(matriz):
 
     # Verifica filas
     for fila in matriz:
-        if contar_objeto("1", fila=fila) == len(fila):
+        if contar_objeto("🌹", fila=fila) == len(fila):
             print(
                 "\033[38;2;0;255;0m" +
                 "¡Has ganado! Toda una fila contiene plantas." +
@@ -436,8 +444,6 @@ def verificar_fin_juego(matriz):
             )
             return False
         
-        # Falta verificar diagonales (esto sería puntos extras)
-
     return False  # El juego aún no ha terminado
 
 
@@ -471,92 +477,6 @@ def contar_objeto(objeto, fila=None, columna=None):
             "Debes especificar una fila o columna." +
             "\033[0;m"
         )
-
-
-def nueva_partida():
-    """
-    Función que le pregunta al usuario si desea jugar
-    de nuevo. El juego si no se quiere continuar y ejecuta
-    la función principal si se quiere continuar.
-    """
-
-    decisión = input(
-        "\033[38;2;255;211;64m" +
-        "¿Deseas jugar otra partida? Sí/No o S/N: " +
-        "\033[0;m"
-    )
-
-    if type(decisión) != str:
-        print(
-            "\033[38;2;255;0;0m" +
-            "Solo puedes ingresar Sí/No o S/N.\n" +
-            "\033[0;m"
-        )
-        return nueva_partida()
-   
-    if decisión == "Sí" or decisión == "S":
-        print("\033[2J\033[1;1f")
-        return principal()
-
-    elif decisión == "No" or decisión == "N":
-        print(
-            "\033[38;2;0;255;0m" +
-            "Gracias por jugar. ¡Vuelve pronto!\n" +
-            "\033[0;m"
-        )
-        return exit()
-
-
-def manejador_juego():
-    """
-    Función que se encarga de mostrar siempre el mapa
-    del juego actualizado y el menú de acciones.
-    """
-    
-    while True:
-        print("\033[2J\033[1;1f")
-        mostrar_matriz()
-        
-        opción = menú_acciones()
-        
-        if opción == 1:
-            menú_semillas_aux()
-        
-        if opción == 2:
-            print("Sembrar planta")
-        
-        if opción == 3:
-            print("Solicitar ciclovía")
-        
-        cambiar_matriz_aux()
-
-
-def principal():
-    """
-    Función que se encarga de inicializar el juego.
-    """
-
-    global dificultad
-    global mapa_juego
-    global mapa_juego_aux
-
-    bienvenida()
-    menú_principal()
-    menú_dificultad()
-    crear_matriz_aux()
-    mapa_juego_aux = mapa_juego.copy()
-    manejador_juego()
-
-
-
-
-
-
-######################################### NUEVO  
-#import copy
-tipo_semillas = ["zinias", "cerezos", "tulipanes", "rosas", "mamón chino" ]
-tipo_plantas = ["🌷", "🌹", "🌺", "🌻", "🌼", "🥀"]
-mapa_juego_aux = [] 
 
 
 def validar_posición(x, y, objeto):
@@ -615,7 +535,7 @@ def planta_crece(datos_objeto, x, y):
     
     # En caso de que ya haya crecido
     if turnos_a_crecer == 0:
-        cambiar_matriz_visual("🌻", x, y)
+        cambiar_matriz_visual("🌹", x, y)
         return [tipo_plantas[0], 0, datos_objeto[2]]
 
     # En caso de que aún no haya crecido
@@ -721,6 +641,84 @@ def menú_semillas_aux():
     
     mapa_juego_aux[y][x] = semilla
     cambiar_matriz_visual("🌱", x, y)
+
+
+def nueva_partida():
+    """
+    Función que le pregunta al usuario si desea jugar
+    de nuevo. El juego si no se quiere continuar y ejecuta
+    la función principal si se quiere continuar.
+    """
+
+    decisión = input(
+        "\033[38;2;255;211;64m" +
+        "¿Deseas jugar otra partida? Sí/No o S/N: " +
+        "\033[0;m"
+    )
+
+    if type(decisión) != str:
+        print(
+            "\033[38;2;255;0;0m" +
+            "Solo puedes ingresar Sí/No o S/N.\n" +
+            "\033[0;m"
+        )
+        return nueva_partida()
+   
+    if decisión == "Sí" or decisión == "S":
+        print("\033[2J\033[1;1f")
+        return principal()
+
+    elif decisión == "No" or decisión == "N":
+        print(
+            "\033[38;2;0;255;0m" +
+            "Gracias por jugar. ¡Vuelve pronto!\n" +
+            "\033[0;m"
+        )
+        return exit()
+
+
+def manejador_juego():
+    """
+    Función que se encarga de mostrar siempre el mapa
+    del juego actualizado y el menú de acciones.
+    """
+
+    global mapa_juego
+    
+    while True:
+        print("\033[2J\033[1;1f")
+        mostrar_matriz()
+        
+        opción = menú_acciones()
+        
+        if opción == 1:
+            menú_semillas_aux()
+        
+        if opción == 2:
+            print("Sembrar planta")
+        
+        if opción == 3:
+            print("Solicitar ciclovía")
+        
+        cambiar_matriz_aux()
+        municipalidad(mapa_juego)
+
+
+def principal():
+    """
+    Función que se encarga de inicializar el juego.
+    """
+
+    global dificultad
+    global mapa_juego
+    global mapa_juego_aux
+
+    bienvenida()
+    menú_principal()
+    menú_dificultad()
+    crear_matriz_aux()
+    mapa_juego_aux = mapa_juego.copy()
+    manejador_juego()
 
 
 principal()
