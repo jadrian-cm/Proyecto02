@@ -377,31 +377,16 @@ def municipalidad(matriz):
 
     filas = len(matriz)
     columnas = len(matriz[0])
-
-    # Deja la semilla como está
-    for i in range(filas):
-        for j in range(columnas):
-            if matriz[i][j] == "🌱":
-                pass
-
-    # Reemplaza la ciclovía con tierra
-    for i in range(filas):
-        for j in range(columnas):
-            if matriz[i][j] == "🚵":
-                matriz[i][j] = "🟫"
-
-    # Reemplaza la planta con concreto
-    for i in range(filas):
-        for j in range(columnas):
-            if matriz[i][j]  in tipo_plantas:
-                matriz[i][j] = "🔳"
-
     # Agrega concreto aleatoriamente entre 0 y filas // 2
     cantidad_concreto = random.randint(0, filas // 2)
     for _ in range(cantidad_concreto):
         fila = random.randint(0, filas - 1)
         columna = random.randint(0, columnas - 1)
+        if matriz[fila][columna] == "🌹":
+            pass
         matriz[fila][columna] = "🔳"
+
+
 
     return matriz
 
@@ -645,7 +630,7 @@ def menú_semillas_aux():
     if not validar_posición(x, y, semilla[0]):
         return menú_semillas_aux
     
-    mapa_juego[y][x] =  "🌹"
+    cambiar_matriz_visual("🌹", x, y)
     mapa_juego_aux[y][x] = semilla
     
 
