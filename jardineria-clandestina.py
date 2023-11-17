@@ -8,7 +8,7 @@ import random
 import copy
 import webbrowser
 
-
+matriz_visual = []
 # Semillas: [nombre, turnos para crecer, turnos vivas]
 semillas_fácil = [
     ["zinias", 2, 8],
@@ -156,7 +156,7 @@ def crear_matriz_aux():
     """
 
     global dificultad
-    global mapa_juego
+    
     global semillas
 
     # Dificuldades por defecto
@@ -164,16 +164,19 @@ def crear_matriz_aux():
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(6, 6)
         semillas = semillas_fácil
+        return mapa_juego
 
     elif dificultad == 2:
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(10, 10)
         semillas = semillas_medio
+        return mapa_juego
 
     elif dificultad == 3:
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(18, 18)
         semillas = semillas_difícil
+        return mapa_juego
 
     # Dificultad personalizada
     elif dificultad == 4:
@@ -182,7 +185,9 @@ def crear_matriz_aux():
         
         if (not validar_opción(filas, 3, 20) or
             not validar_opción(columnas, 3, 20)):
-            return crear_matriz_aux()
+            
+            mapa_juego = crear_matriz_aux()
+            return mapa_juego
         
         print("\033[2J\033[1;1f")
         mapa_juego = crear_matriz(int(filas), int(columnas))
@@ -551,7 +556,7 @@ def planta_muere(datos_objetos, x, y):
 
     global tipo_plantas
 
-    turnos_a_morir = datos_objetos - 1
+    turnos_a_morir = datos_objetos[2] - 1
     
     if turnos_a_morir == 0 :
         cambiar_matriz_visual("🥀", x, y)
@@ -632,6 +637,7 @@ def menú_semillas_aux():
 
     global semillas
     global mapa_juego_aux
+    global mapa_juego
 
     semilla = menú_sembrar_semilla()
     x, y = solicitar_coordenadas()
@@ -639,10 +645,39 @@ def menú_semillas_aux():
     if not validar_posición(x, y, semilla[0]):
         return menú_semillas_aux
     
+    mapa_juego[y][x] =  "🌹"
     mapa_juego_aux[y][x] = semilla
-    cambiar_matriz_visual("🌱", x, y)
+    
 
 
+def menu_ciclovias():
+    """
+    Menu para colocar una ciclovia
+    """
+    global mapa_juego_aux
+    # Parte de solicitar datos
+    x, y = solicitar_coordenadas()
+    while True:
+
+        print("¿En qué dirección desea colocar la ciclovia?")
+        direccion = input("v/h")
+        
+        if direccion == "h"  or direccion == "H" :
+            dato = ["🚵", "h"]
+            break
+        
+        if direccion == "v" or direccion == "V":
+            dato = ["🚵", "v"]
+            break
+        
+        print("Solo seleccione h/v")
+    # Parte de efectuar cambios
+    if not validar_posición(x, y, "🚵") :
+        return menu_ciclovias
+    cambiar_matriz_visual("🚵", x, y)
+    mapa_juego_aux[y][x] == dato
+
+    
 def nueva_partida():
     """
     Función que le pregunta al usuario si desea jugar
@@ -698,7 +733,7 @@ def manejador_juego():
             print("Sembrar planta")
         
         if opción == 3:
-            print("Solicitar ciclovía")
+           menu_ciclovias()
         
         cambiar_matriz_aux()
         municipalidad(mapa_juego)
@@ -712,12 +747,14 @@ def principal():
     global dificultad
     global mapa_juego
     global mapa_juego_aux
+    global matriz_visual
 
     bienvenida()
     menú_principal()
     menú_dificultad()
-    crear_matriz_aux()
-    mapa_juego_aux = mapa_juego.copy()
+    mapa_juego = crear_matriz_aux()
+    mapa_juego_aux = copy.deepcopy(mapa_juego)
+
     manejador_juego()
 
 
